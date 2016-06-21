@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+    <script type="text/javascript">
+
+      function sendStuff() {
+          var subjSel = document.getElementById("subject");
+          var inQuest = document.getElementById("question");
+          var inW = document.getElementById("optionW");
+          var inX = document.getElementById("optionX");
+          var inY = document.getElementById("optionY");
+          var inZ = document.getElementById("optionZ");
+          var inCorr = document.getElementById("correct");
+          var subj = subjSel.options[subjSel.selectedIndex].value;
+          var rootRef = new Firebase('https://popping-inferno-1330.firebaseio.com/');
+        var useRef = rootRef.child(subj);
+        useRef.push().set({
+            question: inQuest.value,
+            W: inW.value,
+            X: inX.value,
+            Y: inY.value,
+            Z: inZ.value,
+            Correct: inCorr.options[inCorr.selectedIndex].value
+        } ,function(error){
+            if(error){
+                alert("Oops, data could not be saved.");
+            }else{
+                alert("good");
+            }
+        });
+      }
+
+    </script>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>Enter your question</h1>
+<form action="javascript:sendStuff()">
+    Subject: <select id="subject">
+      <option value = "Biology">Biology</option>
+      <option value = "Physics">Physics</option>
+      <option value = "Chemistry">Chemistry</option>
+      <option value = "Earth_Science">Earth Science</option>
+      <option value = "Astronomy">Astronomy</option>
+      </select><br>
+  Question: <input type="text" id="question"><br>
+  W: <input type="text" id="optionW"> <br>
+  X: <input type="text" id="optionX"> <br>
+  Y: <input type="text" id="optionY"> <br>
+  Z: <input type="text" id="optionZ"> <br>
+    Correct Answer: <select id = "correct">
+      <option value = "w">W</option>
+      <option value = "x">X</option>
+      <option value = "y">Y</option>
+      <option value = "z">Z</option>
+      </select><br>
+      <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
