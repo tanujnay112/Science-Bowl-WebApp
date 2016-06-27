@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase.js"></script>
+   <script src="init.js"></script>
+   <script>
+    var config = {
+      apiKey: "AIzaSyC5vrJU4FkBRmGzAYMvtqYXu3F06OC7bQM",
+      authDomain: "science-bowl.firebaseapp.com",
+      databaseURL: "https://science-bowl.firebaseio.com",
+      storageBucket: "science-bowl.appspot.com",
+    };
+    firebase.initializeApp(config);
+    function init(){
+    var snappy;
+    var index = 0;
+    var str = "";
+    //var query = firebase.database().ref("tmp/Biology/Anatomy/Easy").orderByKey();
+    var query = firebase.database().ref("quizlist/quizlist").orderByKey();
+
+
+
+query.once("value")
+
+  .then(function(snapshot) {
+      snappy = snapshot;
+      snapshot.forEach(function (data){
+          str = str + data.key+";";
+      });
+      //console.log(snappy.val());
+      
+var s = str.split(";");
+
+  var x = (snappy.child(s[index]).exportVal());
+  //var y = "Subject: <br> " + x.subj + "Question: <br> " + x.question + 
+ index = index +1;
+});
+    }
+  </script>
+  </head>
+  <body onload="init()">
+      <div id = "stuff">
+      </div>
+  </body>
+</html>

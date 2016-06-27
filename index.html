@@ -1,0 +1,54 @@
+  <!DOCTYPE html>
+<html>
+      <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase.js"></script>
+      <script src="init.js"></script>
+      <script src="https://apis.google.com/js/platform.js" async defer></script>
+      <meta name="google-signin-client_id" content="568327038315-5gc1eovtfcrgpco0sumpbhfaffhi93ja.apps.googleusercontent.com">
+     <script>
+    
+    firebase.initializeApp(config);
+  </script>
+    <script type= "text/javascript">
+  
+function onSignIn(googleUser) {
+  console.log('Google Auth Response', googleUser);
+  var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
+    unsubscribe();
+    if (!isUserEqual(googleUser, firebaseUser)) {
+      var credential = firebase.auth.GoogleAuthProvider.credential(
+          googleUser.getAuthResponse().id_token);
+      firebase.auth().signInWithCredential(credential).catch(function(error) {
+
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        var email = error.email;
+        var credential = error.credential;
+        console.log(error);
+      });
+     //
+    } else {
+      console.log('User already signed-in Firebase.');
+      location.replace(ENTRY);
+    }
+  });
+ 
+}
+
+function isUserEqual(googleUser, firebaseUser) {
+  if (firebaseUser) {
+    var providerData = firebaseUser.providerData;
+    for (var i = 0; i < providerData.length; i++) {
+      if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+          providerData[i].uid === googleUser.getBasicProfile().getId()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+    </script>
+<head>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    
+</head>
+</html>

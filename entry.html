@@ -1,9 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase.js"></script>
+    <script src="init.js"></script>
     
+   <script>
+       var config = {
+      apiKey: "AIzaSyC5vrJU4FkBRmGzAYMvtqYXu3F06OC7bQM",
+      authDomain: "science-bowl.firebaseapp.com",
+      databaseURL: "https://science-bowl.firebaseio.com",
+      storageBucket: "science-bowl.appspot.com",
+    };
+    firebase.initializeApp(config);
+  </script>
     <script type="text/javascript">
-
+    firebase.auth().onAuthStateChanged(function(user) {
+  if (!user){
+    location.replace(LOGIN);
+  }
+});
       function sendStuff() {
           var subjSel = document.getElementById("subject");
           var inQuest = document.getElementById("question");
@@ -28,8 +43,18 @@
         sessionStorage.setItem("subSubj", subSubj);
         sessionStorage.setItem("diff", diff);
         sessionStorage.setItem("correct",inCorr.value);
-        location.replace("confirmation.html");
+        window.location.href = CONF;
        
+      }
+     
+      function signOut(){
+      firebase.auth().signOut().then(function() {
+  // Sign-out successful.
+  alert("good");
+  //location.replace("index.html");
+}, function(error) {
+  // An error happened.
+});
       }
 
 function populate(s1, s2){
@@ -40,7 +65,7 @@ function populate(s1, s2){
     if(s1.value == "Biology"){
         optionArray = ["Anatomy|Anatomy","Plant Biology|Plant Biology", "Ecology|Ecology"];
     }else if(s1.value == "Chemistry"){
-        optionArray = [""];
+        optionArray = ["Orgo|Organic Chem"];
     }else if(s1.value == "Physics"){
         optionArray = [""];
     }else if(s1.value == "Earth Science"){
@@ -49,6 +74,8 @@ function populate(s1, s2){
         optionArray = [""];
     }else if(s1.value == "Energy"){
         optionArray = [""];
+    }else if(s1.value == "Math"){
+        optionArray = ["Calculation|Calculation"];
     }
     for(var option in optionArray){
 		var pair = optionArray[option].split("|");
@@ -58,13 +85,41 @@ function populate(s1, s2){
 		s2.options.add(newOption);
 	}
 }
+
+function init(){
+    
+     //console.log(firebase.auth().currentUser);
+    if(sessionStorage.subj == undefined){
+        return;
+    }
+     var subj = document.getElementById("subject");
+     subj.value = sessionStorage.subj;   
+          var inQuest = document.getElementById("question");
+          inQuest.value = sessionStorage.question;
+          var inW = document.getElementById("optionW");
+          inW.value = sessionStorage.inW;
+          var inX = document.getElementById("optionX");
+          inX.value = sessionStorage.inX;
+          var inY = document.getElementById("optionY");
+          inY.value = sessionStorage.inY;
+          var inZ = document.getElementById("optionZ");
+          inZ.value = sessionStorage.inZ;
+          var inCorr = document.getElementById("correct");
+          inCorr.value = sessionStorage.correct;
+          var subSubjSel = document.getElementById("subSubject");
+          subSubjSel.value = sessionStorage.subSubj;
+          var diffSel = document.getElementById("diff");
+          diffSel.value = sessionStorage.diff;
+         
+}
+
     </script>
 <title>Question Entry</title>
 </head>
-<body>
+<body onload="init()">
 
 <h1>Enter your question</h1>
-<form action="javascript:sendStuff()">
+<form action="javascript:sendStuff()" autocomplete="off">
     Subject: <select id="subject" onchange="populate(this.id,'subSubject')">
       <option value = "Biology">Biology</option>
       <option value = "Physics">Physics</option>
@@ -72,6 +127,7 @@ function populate(s1, s2){
       <option value = "Earth_Science">Earth Science</option>
       <option value = "Astronomy">Astronomy</option>
       <option value = "Energy">Energy</option>  
+       <option value = "Math">Math</option>
       </select><br>
       Sub-Subject:<select id = "subSubject">
           <option value="Anatomy">Anatomy</option>
@@ -79,9 +135,12 @@ function populate(s1, s2){
               <option value="Ecology">Ecology</option>
           </select> <br>
       Difficulty: <select id = "diff">
-          <option value = "Easy">Easy</option><br>
-          <option value = "Medium">Medium</option><br>
-          <option value = "Hard">Hard</option><br>
+          <option value = "0">0</option><br>
+          <option value = "1">1</option><br>
+          <option value = "2">2</option><br>
+          <option value = "3">3</option><br>
+          <option value = "4">4</option><br>
+          <option value = "5">5</option><br>
           </select> <br><br>
   Question:<br> <textarea rows="5" cols="80" id="question"></textarea><br>
   W: <input type="text" id="optionW"> <br>
@@ -96,6 +155,6 @@ function populate(s1, s2){
       </select><br>
       <input type="submit" value="Submit">
 </form>
-
+<button onclick="signOut()">Sign Out</button>
 </body>
 </html>

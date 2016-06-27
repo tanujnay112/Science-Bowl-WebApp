@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
-  <script type = "text/javascript">
-  
+   <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase.js"></script>
+   <script src="init.js"></script>
+   <script>
+    var config = {
+      apiKey: "AIzaSyC5vrJU4FkBRmGzAYMvtqYXu3F06OC7bQM",
+      authDomain: "science-bowl.firebaseapp.com",
+      databaseURL: "https://science-bowl.firebaseio.com",
+      storageBucket: "science-bowl.appspot.com",
+    };
+    firebase.initializeApp(config);
+  </script>
+  <script type="text/javascript">
+    firebase.auth().onAuthStateChanged(function(user) {
+  if (!user) {
+    location.replace(LOGIN);
+  }
+    if(sessionStorage.subj == undefined){
+        location.replace(ENTRY);
+    }
+    });
     function startup(){
       var out = document.getElementById("quest");
        
@@ -15,26 +32,32 @@
         out.innerHTML = str;
     }
     function goBack(){
-        sessionStorage.clear();
         location.replace("entry.html");
     }
     function confirm(){
-          var rootRef = new Firebase('https://popping-inferno-1330.firebaseio.com/');
-        var useRef = rootRef.child(sessionStorage.getItem("subj")+"/"+sessionStorage.getItem("subSubj")+"/"+sessionStorage.getItem("diff"));
+           var database = firebase.database();
+        var useRef = database.ref("tmp/"+sessionStorage.getItem("subj")+"/"+sessionStorage.getItem("subSubj")+"/"+sessionStorage.getItem("diff"));
          useRef.push().set({
             question: sessionStorage.getItem("question"),
             W: sessionStorage.getItem("inW"),
             X: sessionStorage.getItem("inX"),
             Y: sessionStorage.getItem("inY"),
             Z: sessionStorage.getItem("inZ"),
-            Correct: sessionStorage.getItem("correct")
+            Correct: sessionStorage.getItem("correct"),
+            User: firebase.auth().currentUser.displayName
         } ,function(error){
+            console.log(error);
             if(error){
                 alert("Oops, data could not be saved.");
+                return;
             }else{
                 alert("Saved!");
+                 sessionStorage.clear();
+        location.replace("entry.html");
             }
+            
         });
+       
     }
    </script>
 <title>Question Entry</title>
