@@ -18,6 +18,7 @@
   if (!user){
     location.replace(LOGIN);
   }
+  
 });
       function sendStuff() {
           var subjSel = document.getElementById("subject");
@@ -57,41 +58,26 @@
 });
       }
 
-function populate(s1, s2){
-    var s1 = document.getElementById(s1);
-    var s2 = document.getElementById(s2);
-    s2.innerHTML="";
-    var optionArray;
-    if(s1.value == "Biology"){
-        optionArray = ["Anatomy|Anatomy","Plant Biology|Plant Biology", "Ecology|Ecology"];
-    }else if(s1.value == "Chemistry"){
-        optionArray = ["Orgo|Organic Chem"];
-    }else if(s1.value == "Physics"){
-        optionArray = [""];
-    }else if(s1.value == "Earth Science"){
-        optionArray = [""];
-    }else if(s1.value == "Astronomy"){
-        optionArray = [""];
-    }else if(s1.value == "Energy"){
-        optionArray = [""];
-    }else if(s1.value == "Math"){
-        optionArray = ["Calculation|Calculation"];
-    }
-    for(var option in optionArray){
-		var pair = optionArray[option].split("|");
-		var newOption = document.createElement("option");
-		newOption.value = pair[0];
-		newOption.innerHTML = pair[1];
-		s2.options.add(newOption);
-	}
-}
+
 
 function init(){
     
      //console.log(firebase.auth().currentUser);
+    var q = firebase.database().ref("admins").orderByKey();
+    q.once('value')
+  .then(function(snapshot) {
+   var p = snapshot.child(firebase.auth().currentUser.uid);
+   console.log(p.val());
+      if(p.val() != undefined){
+        var div = document.createElement('div');
+        div.innerHTML = "<a href = \"review.html\">Go to review page.</a >";
+        document.getElementsByTagName("BODY")[0].appendChild(div);
+      }
+  });
     if(sessionStorage.subj == undefined){
         return;
     }
+    
      var subj = document.getElementById("subject");
      subj.value = sessionStorage.subj;   
           var inQuest = document.getElementById("question");
@@ -124,7 +110,7 @@ function init(){
       <option value = "Biology">Biology</option>
       <option value = "Physics">Physics</option>
       <option value = "Chemistry">Chemistry</option>
-      <option value = "Earth_Science">Earth Science</option>
+      <option value = "Earth Science">Earth Science</option>
       <option value = "Astronomy">Astronomy</option>
       <option value = "Energy">Energy</option>  
        <option value = "Math">Math</option>
@@ -148,10 +134,10 @@ function init(){
   Y: <input type="text" id="optionY"> <br>
   Z: <input type="text" id="optionZ"> <br>
     Correct Answer: <select id = "correct">
-      <option value = "w">W</option>
-      <option value = "x">X</option>
-      <option value = "y">Y</option>
-      <option value = "z">Z</option>
+      <option value = "W">W</option>
+      <option value = "X">X</option>
+      <option value = "Y">Y</option>
+      <option value = "Z">Z</option>
       </select><br>
       <input type="submit" value="Submit">
 </form>

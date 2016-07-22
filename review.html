@@ -11,35 +11,216 @@
       storageBucket: "science-bowl.appspot.com",
     };
     firebase.initializeApp(config);
-    function init(){
-    var snappy;
-    var index = 0;
+     var snappy = "";
+    var index = -1;
     var str = "";
-    //var query = firebase.database().ref("tmp/Biology/Anatomy/Easy").orderByKey();
-    var query = firebase.database().ref("quizlist/quizlist").orderByKey();
-
-
-
-query.once("value")
-
+    var subj = "Biology";
+    var subSubj = "Anatomy";
+    var diff = "0";
+    var x = "";
+    var s;
+    var on = false;
+    var delet = true;
+    var q = firebase.database().ref("admins").orderByKey();
+    q.once('value')
+  .then(function(snapshot) {
+      if(firebase.auth().currentUser == null){
+          location.replace("index.html");
+      }
+      var p = snapshot.child(firebase.auth().currentUser.uid);
+      if(p.val() == undefined){
+          location.replace("entry.html")
+      }
+  });
+    function init(){
+        str = "";
+    var query = firebase.database().ref("tmp/"+ subj + "/" + subSubj+"/"+diff).orderByKey();
+    //var query = firebase.database().ref("quizlist/quizlist").orderByKey();
+query.once('value')
   .then(function(snapshot) {
       snappy = snapshot;
+      if(!snapshot.hasChildren()){
+          rip();
+          return;
+      }
+      on = true;
       snapshot.forEach(function (data){
           str = str + data.key+";";
       });
       //console.log(snappy.val());
-      
-var s = str.split(";");
-
-  var x = (snappy.child(s[index]).exportVal());
-  //var y = "Subject: <br> " + x.subj + "Question: <br> " + x.question + 
- index = index +1;
+      str = str.substring(0,str.length-1);
+s = str.split(";");
+next();
 });
     }
+function rip(){
+    document.getElementById("stuff").innerHTML = "No more questions under this category.";
+          on = false;
+}
+    function next(){
+        index = (index +1)%s.length;
+        if(s[index] == undefined){
+            rip();
+            return;
+        }
+        x = (snappy.child(s[index]).exportVal());
+        document.getElementById("editor").style = "visibility:hidden";
+     var y = "Subject:  " + subj +"<br> <br>"+"Sub-Subject:  " + subSubj +"<br> <br>"+ "Question: " + x.question+"<br> <br> W) " + x.W + "<br>"+"X) " + x.X + "<br>"+"Y) " + x.Y + "<br>"+"Z) " + x.Z + "<br>"+"Correct Answer: " + x.Correct;
+    document.getElementById("stuff").innerHTML = y; 
+    
+    }
+    function approve(s1,ss,d){
+        if(!on)
+        return;
+        if(s[index == undefined]){
+            rip();
+            return;
+        }
+       var useRef = firebase.database().ref("final/"+subj+"/"+subSubj+"/"+diff);
+         useRef.push().set({
+            question: x.question,
+            W: x.W,
+            X: x.X,
+            Y: x.Y,
+            Z: x.Z,
+            Correct: x.Correct
+        } ,function(error){
+            console.log(error);
+            if(error){
+                alert("Oops, data could not be saved.");
+                return;
+            }else{
+                alert("Saved!");
+                
+                decline(s1,ss,d);
+            }
+        });
+    }
+    function decline(s1,ss,d){
+        if(!on)
+        return;
+        if(!delet){
+            delet = true;
+        return;
+        }
+        var form = document.forms["editor"];
+        firebase.database().ref("tmp/"+s1+"/"+ss+"/"+d+"/"+s[index]).remove();
+        s[index] = undefined;
+        next();
+    }
+    function edit(){
+        if(!on)
+        return;
+        document.getElementById("subject").value = subj;
+     document.getElementById("subSubject") .value =subSubj;
+     document.getElementById("diff").value = diff;
+     document.getElementById("question").value = x.question;
+     document.getElementById("inW").value = x.W;
+     document.getElementById("inX").value = x.X;
+     document.getElementById("inY").value = x.Y;
+     document.getElementById("inZ").value = x.Z;
+     document.getElementById("corr").value = x.Correct;
+        document.getElementById("editor").style.visibility = "visible";
+    }
+    
+
+function submit(){
+    var form = document.forms["editForm"];
+    var s1 = subj;
+    var ss = subSubj;
+    var d = diff;
+    subj =form["subject"] .value;
+    delet = form["delete"].isChecked;
+    subSubj =form["subSubject"] .value;
+    diff = form["diff"].value;
+    x = {W:form["optionW"].value,X:form["optionX"].value,Y:form["optionY"].value,Z:form["optionZ"].value,question:form["question"].value,Correct:form["correct"].value};
+    approve(s1,ss,d);
+    document.getElementById("editor").style.visibility = "hidden";
+}
+
+function update(){
+    var form = document.forms["selector"];
+    subj =form["subject"] .value;
+    subSubj =form["subSubject"] .value;
+    diff = form["diff"].value;
+    index = -1;
+    init();
+}
   </script>
   </head>
   <body onload="init()">
+      <form name = "selector" onchange="update()">
+       Subject: <select name="subject" id = "subject1" onchange="populate(this.id,'subSubject1')">
+      <option value = "Biology">Biology</option>
+      <option value = "Physics">Physics</option>
+      <option value = "Chemistry">Chemistry</option>
+      <option value = "Earth Science">Earth Science</option>
+      <option value = "Astronomy">Astronomy</option>
+      <option value = "Energy">Energy</option>  
+       <option value = "Math">Math</option>
+      </select><br>
+      Sub-Subject:<select name = "subSubject" id = "subSubject1">
+          <option value="Anatomy">Anatomy</option>
+              <option value="Plant Biology">Plant Biology</option>
+              <option value="Ecology">Ecology</option>
+          </select> <br>
+      Difficulty: <select name = "diff">
+          <option value = "0">0</option><br>
+          <option value = "1">1</option><br>
+          <option value = "2">2</option><br>
+          <option value = "3">3</option><br>
+          <option value = "4">4</option><br>
+          <option value = "5">5</option><br>
+          </select> <br><br>
+        </form>
       <div id = "stuff">
       </div>
+      
+      </div>
+      <button onclick="approve(subj,subSubj,diff)">Approve</button>
+      <button onclick="decline(subj,subSubj,diff)">Decline</button>
+      <button onclick="next()">Skip</button>
+      <button onclick="edit()">Edit</button>
+      <br>
+      <a href = "entry.html">Go to entry page.</a >
+
+      <div id = "editor" style="visibility:hidden">
+          <form name = "editForm" action="javascript:submit()" autocomplete="off">
+    Subject: <select name="subject" id = "subject" onchange="populate(this.id,'subSubject')">
+      <option value = "Biology">Biology</option>
+      <option value = "Physics">Physics</option>
+      <option value = "Chemistry">Chemistry</option>
+      <option value = "Earth Science">Earth Science</option>
+      <option value = "Astronomy">Astronomy</option>
+      <option value = "Energy">Energy</option>  
+       <option value = "Math">Math</option>
+      </select><br>
+      Sub-Subject:<select name = "subSubject" id = "subSubject">
+          <option value="Anatomy">Anatomy</option>
+              <option value="Plant Biology">Plant Biology</option>
+              <option value="Ecology">Ecology</option>
+          </select> <br>
+      Difficulty: <select name = "diff" id = "diff">
+          <option value = "0">0</option><br>
+          <option value = "1">1</option><br>
+          <option value = "2">2</option><br>
+          <option value = "3">3</option><br>
+          <option value = "4">4</option><br>
+          <option value = "5">5</option><br>
+          </select> <br><br>
+  Question:<br> <textarea rows="5" cols="80" id="question"></textarea><br>
+  W: <input type="text" name="optionW" id="inW"> <br>
+  X: <input type="text" name="optionX" id = "inX"> <br>
+  Y: <input type="text" name="optionY" id = "inY"> <br>
+  Z: <input type="text" name="optionZ" id = "inZ"> <br>
+    Correct Answer: <select name = "correct" id = "corr">
+      <option value = "w">W</option>
+      <option value = "x">X</option>
+      <option value = "y">Y</option>
+      <option value = "z">Z</option>
+      </select><br>
+      <input type = "checkbox" name="delete" checked>Delete from tmp??</input>
+      <input type="submit" value="Submit">
+</form>
   </body>
 </html>

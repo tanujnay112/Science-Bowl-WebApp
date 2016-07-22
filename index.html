@@ -11,7 +11,6 @@
     <script type= "text/javascript">
   
 function onSignIn(googleUser) {
-  console.log('Google Auth Response', googleUser);
   var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
     unsubscribe();
     if (!isUserEqual(googleUser, firebaseUser)) {
