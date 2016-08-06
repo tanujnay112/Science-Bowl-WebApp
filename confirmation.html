@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
-<head>
-   <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase.js"></script>
-   <script src="init.js"></script>
+<!-- saved from url=(0054)https://science-bowl.firebaseapp.com/confirmation.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <script src="./confirmation_files/cb=gapi.loaded_0" async=""></script><script src="./confirmation_files/firebase.js"></script>
+   <script src="./confirmation_files/init.js"></script>
    <script>
     var config = {
       apiKey: "AIzaSyC5vrJU4FkBRmGzAYMvtqYXu3F06OC7bQM",
@@ -39,12 +39,12 @@
         var useRef = database.ref("tmp/"+sessionStorage.getItem("subj")+"/"+sessionStorage.getItem("subSubj")+"/"+sessionStorage.getItem("diff"));
          useRef.push().set({
             question: sessionStorage.getItem("question"),
-            W: sessionStorage.getItem("inW"),
-            X: sessionStorage.getItem("inX"),
-            Y: sessionStorage.getItem("inY"),
-            Z: sessionStorage.getItem("inZ"),
-            Correct: sessionStorage.getItem("correct"),
-            User: firebase.auth().currentUser.displayName
+            w: sessionStorage.getItem("inW"),
+            x: sessionStorage.getItem("inX"),
+            y: sessionStorage.getItem("inY"),
+            z: sessionStorage.getItem("inZ"),
+            correct: sessionStorage.getItem("correct"),
+            user: firebase.auth().currentUser.displayName
         } ,function(error){
             console.log(error);
             if(error){
@@ -61,14 +61,15 @@
     }
    </script>
 <title>Question Entry</title>
-</head>
+<script type="text/javascript" charset="UTF-8" src="./confirmation_files/api.js" gapi_processed="true"></script></head>
 <body onload="javascript:startup()">
     <h1>Are you sure this is what you meant to submit???</h1> <br>
-    <div id = "quest">sad</div>
+    <div id="quest">Sad</div>
 
-</body>
+
  
  <button onclick="confirm()">Confirm</button>
  <button onclick="goBack()">No, go back</button>
 
+</body>
 </html>

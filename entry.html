@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase.js"></script>
-    <script src="init.js"></script>
+<!-- saved from url=(0047)https://science-bowl.firebaseapp.com/entry.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="./entry_files/cb=gapi.loaded_0" async=""></script><script src="./entry_files/firebase.js"></script>
+    <script src="./entry_files/init.js"></script>
     
    <script>
        var config = {
@@ -101,46 +101,46 @@ function init(){
 
     </script>
 <title>Question Entry</title>
-</head>
+<script type="text/javascript" charset="UTF-8" src="./entry_files/api.js" gapi_processed="true"></script></head>
 <body onload="init()">
 
 <h1>Enter your question</h1>
 <form action="javascript:sendStuff()" autocomplete="off">
-    Subject: <select id="subject" onchange="populate(this.id,'subSubject')">
-      <option value = "Biology">Biology</option>
-      <option value = "Physics">Physics</option>
-      <option value = "Chemistry">Chemistry</option>
-      <option value = "Earth Science">Earth Science</option>
-      <option value = "Astronomy">Astronomy</option>
-      <option value = "Energy">Energy</option>  
-       <option value = "Math">Math</option>
+    Subject: <select id="subject" onchange="populate(this.id,&#39;subSubject&#39;)">
+      <option value="Biology">Biology</option>
+      <option value="Physics">Physics</option>
+      <option value="Chemistry">Chemistry</option>
+      <option value="Earth Science">Earth Science</option>
+      <option value="Astronomy">Astronomy</option>
+      <option value="Energy">Energy</option>  
+       <option value="Math">Math</option>
       </select><br>
-      Sub-Subject:<select id = "subSubject">
+      Sub-Subject:<select id="subSubject">
           <option value="Anatomy">Anatomy</option>
               <option value="Plant Biology">Plant Biology</option>
               <option value="Ecology">Ecology</option>
           </select> <br>
-      Difficulty: <select id = "diff">
-          <option value = "0">0</option><br>
-          <option value = "1">1</option><br>
-          <option value = "2">2</option><br>
-          <option value = "3">3</option><br>
-          <option value = "4">4</option><br>
-          <option value = "5">5</option><br>
+      Difficulty: <select id="diff">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
           </select> <br><br>
   Question:<br> <textarea rows="5" cols="80" id="question"></textarea><br>
   W: <input type="text" id="optionW"> <br>
   X: <input type="text" id="optionX"> <br>
   Y: <input type="text" id="optionY"> <br>
   Z: <input type="text" id="optionZ"> <br>
-    Correct Answer: <select id = "correct">
-      <option value = "W">W</option>
-      <option value = "X">X</option>
-      <option value = "Y">Y</option>
-      <option value = "Z">Z</option>
+    Correct Answer: <select id="correct">
+      <option value="W">W</option>
+      <option value="X">X</option>
+      <option value="Y">Y</option>
+      <option value="Z">Z</option>
       </select><br>
       <input type="submit" value="Submit">
 </form>
 <button onclick="signOut()">Sign Out</button>
-</body>
-</html>
+
+</body></html>
