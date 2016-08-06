@@ -44,7 +44,7 @@
             y: sessionStorage.getItem("inY"),
             z: sessionStorage.getItem("inZ"),
             correct: sessionStorage.getItem("correct"),
-            user: firebase.auth().currentUser.displayName
+            email: firebase.auth().currentUser.email
         } ,function(error){
             console.log(error);
             if(error){
