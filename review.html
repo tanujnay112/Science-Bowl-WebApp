@@ -65,7 +65,7 @@ function rip(){
         }
         x = (snappy.child(s[index]).exportVal());
         document.getElementById("editor").style = "visibility:hidden";
-     var y = "Subject:  " + subj +"<br> <br>"+"Sub-Subject:  " + subSubj +"<br> <br>"+ "Question: " + x.question+"<br> <br> W) " + x.w + "<br>"+"X) " + x.x + "<br>"+"Y) " + x.y + "<br>"+"Z) " + x.z + "<br>"+"Correct Answer: " + x.correct;
+     var y = "Email: " + x.email +"<br><br> Subject:  " + subj +"<br> <br>"+"Sub-Subject:  " + subSubj +"<br> <br>"+ "Question: " + x.question+"<br> <br> W) " + x.w + "<br>"+"X) " + x.x + "<br>"+"Y) " + x.y + "<br>"+"Z) " + x.z + "<br>"+"Correct Answer: " + x.correct;
     document.getElementById("stuff").innerHTML = y; 
     
     }
@@ -94,6 +94,15 @@ function rip(){
                 
                 decline(s1,ss,d);
             }
+        });
+        useRef = firebase.database().ref("writers/"+x.email.replace(".","_"));
+        useRef.transaction(function(post){
+            if(post){
+                post++;
+            }else{
+                post = 1;
+            }
+            return post;
         });
     }
     function decline(s1,ss,d){
@@ -160,9 +169,12 @@ function update(){
        <option value="Math">Math</option>
       </select><br>
       Sub-Subject:<select name="subSubject" id="subSubject1">
-          <option value="Anatomy">Anatomy</option>
-              <option value="Plant Biology">Plant Biology</option>
+          <option value="Anatomy_Physiology">Anatomy & Physiology</option>
+              <option value="Plant_Biology">Plant Biology</option>
+              <option value="Cellular_Microbiology">Cellular & Microbiology</option>
               <option value="Ecology">Ecology</option>
+              <option value="Taxonomy">Taxonomy</option>
+              <option value="Genetics_Evolution">Genetics & Evolution</option>
           </select> <br>
       Difficulty: <select name="diff">
           <option value="0">0</option>
@@ -218,7 +230,7 @@ function update(){
       <option value="y">Y</option>
       <option value="z">Z</option>
       </select><br>
-      <input type="checkbox" name="delete" checked="">Delete from tmp??
+      <input type="checkbox" name="delete">Delete from tmp??
       <input type="submit" value="Submit">
 </form>
   
