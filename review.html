@@ -148,9 +148,9 @@ function submit(){
 }
 
 function update(){
-    var form = document.forms["selector"];
-    subj =form["subject"] .value;
-    subSubj =form["subSubject"] .value;
+    var form = document.forms["selector"];  
+    subj =form["subject1"] .value;
+    subSubj =form["subSubject1"] .value;
     diff = form["diff"].value;
     index = -1;
     init();
@@ -168,7 +168,7 @@ function update(){
       <option value="Energy">Energy</option>  
        <option value="Math">Math</option>
       </select><br>
-      Sub-Subject:<select id="subSubject">
+      Sub-Subject:<select id="subSubject1">
         <option value="Anatomy_Physiology">Anatomy &amp; Physiology</option>
         <option value="Plant_Biology">Plant Biology</option>
         <option value="Cellular_Microbiology">Cellular &amp; Microbiology</option>
